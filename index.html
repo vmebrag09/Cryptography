@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+   <main>
+
+        <div class="container-main --bs-info-bg-subtle">
+
+            <div class="container">
+
+                <div class="hidden-image">
+                    <img src="cat.png" alt="">
+                </div>
+                
+                <div class="hidden-text">
+                     <p style="
+                         display: flex;
+                         justify-content: center;
+                         align-items: center;" id="result"></p>
+                </div>
+
+                <div class="container-item1">
+
+                    <div id="logo">
+                        <span>Cryptography Calculator</span>
+                    </div>
+
+                    <!-- Matrix Input -->
+                    <p style="padding-top: 10px;">Enter the 3x3 matrix values separated by commas:</p>
+                    <input class="form-control" type="text" id="matrixInput" placeholder="a11, a12, a13, a21, a22, a23, a31, a32, a33" />
+                    
+                    
+                    <!-- Input for Message -->
+                    <p><label for="matrixB" style="padding-top: 15px;">Enter a message:</label></p>
+                    <input class="form-control" type="text" id="matrixB" oninput="adjustInputLength()" maxlength="18" placeholder="Enter message without separators" />
+                    <p id="encryptedMessage"></p>
+                    
+                    <div class="container-buttons">
+        
+                        <!-- Calculate and Clear Buttons -->
+                        <button onclick="calculate()" class="btn btn-success btn-size" id="liveToastBtn">Calculate Determinant</button>
+                        <div class="buffer-button"></div>
+                        <a href="index.html"><button onclick="clearFields()" class="btn btn-warning btn-size">Clear</button></a>
+        
+                        
+
+                    </div>
+
+                </div>
+        
+           
+                
+                
+
+            </div>
+            
+
+        </div>
+
+        <div class="container-main2">
+
+            <div class="grid-container">       
+
+                <div style="
+                    background-color: #27599d;
+                    color: white;
+                    padding: 20px;
+                    border-radius: 5px;">
+                                
+                    <!-- Matrices Display -->
+                    <h5>Matrix A</h5>
+                    <textarea style="
+                    resize: none;
+                    text-align: center; 
+                    width: 200px; 
+                    padding-top: 15px;  
+                    border: 1px solid #27979d;
+                    border-radius: 5px;
+                    outline: none;" 
+                    id="MatrixA" rows="4" cols="50" readonly></textarea>
+
+                    <div>
+                        <h5 class="sol-det" style="cursor: pointer;" onclick="toggleSolution('show-determinant')">Show Solution &#9660;</h5>
+                        <div id="show-determinant" style="display: none">
+                            <h3>Solution to Determinant</h3>
+                            <textarea style="
+                            width: 400px;
+                            height: 100px;" id="solutiondeterminant"  readonly></textarea>
+                        </div>
+                    </div>
+
+                    <div>
+                        <hr>
+                    </div>
+
+                    <h5>Matrix B</h5>
+                    <textarea style="
+                    resize: none;
+                    text-align: center; 
+                    width: 200px; 
+                    padding-top: 15px;  
+                    border: 1px solid #27979d;
+                    border-radius: 5px;
+                    outline: none;" 
+                    id="Matrixtext" rows="4" cols="50" readonly></textarea>
+
+                </div>
+
+                    <div style="
+                    background-color: #27599d;
+                    color: white;
+                    padding: 20px;
+                    border-radius: 5px;">
+
+                    <!-- Encrypted Message -->
+                    <h5>Encrypted Message</h5>
+                    <textarea style="
+                    resize: none;
+                    text-align: center; 
+                    height: 87px; 
+                    padding-top: 15px;  
+                    border: 1px solid #27979d;
+                    border-radius: 5px;
+                    outline: none;" id="resultMatrix" rows="10" cols="30" readonly></textarea>
+
+                    <div>
+                        <h5 class="sol-det" style="cursor: pointer;" onclick="toggleSolution('show-encrypted')">Show Solution &#9660;</h5>
+                        <div id="show-encrypted" style="display: none">
+                            <h3>Solution to Encrypted Text</h3>
+                            <textarea id="solution" rows="10" cols="30" readonly></textarea>
+                        </div>
+                    </div>
+
+                    <div>
+                        <hr>
+                    </div>
+
+                    <!-- Transpose -->
+                    <h5>Transpose</h5>
+                    <textarea style="
+                    resize: none;
+                    text-align: center; 
+                    height: 87px; 
+                    padding-top: 15px;  
+                    border: 1px solid #27979d;
+                    border-radius: 5px;
+                    outline: none;" 
+                    id="transpose" rows="10" cols="30" readonly></textarea>
+                </div>
+
+                <div style="
+                    background-color: #27599d;
+                    color: white;
+                    padding: 20px;
+                    border-radius: 5px;">
+
+                    <!-- Adjoint A -->
+                    <h5>Adjoint A</h5>
+                    <textarea style="
+                    resize: none;
+                    text-align: center; 
+                    height: 87px; 
+                    padding-top: 15px; 
+                    width: 220px; 
+                    border: 1px solid #27979d;
+                    border-radius: 5px;
+                    outline: none;" 
+                    id="cofactorMatrix" rows="10" cols="10" readonly></textarea>
+
+                    <div>
+                        <h5 class="sol-det" style="cursor: pointer;" onclick="toggleSolution('show-cofactor')">Show Solution &#9660;</h5>
+                        <div id="show-cofactor" style="display: none">
+                            <h3>Solution steps to Adjoint A</h3>
+                            <textarea style="
+                            width: 300px;
+                            height: 200px;" id="solutioncofactorMatrix"  readonly></textarea>
+                        </div>
+                    </div>
+
+                    <div>
+                        <hr>
+                    </div>
+
+                    <!-- Decrypted Matrix -->
+                    <h5>Decrypted Matrix</h5>
+                    <textarea style="
+                    text-align: center; 
+                    height: 87px; 
+                    padding-top: 15px; 
+                    width: 220px; 
+                    border: 1px solid #27979d;
+                    border-radius: 5px;
+                    outline: none;" 
+                    id="decrypt" rows="10" cols="10" readonly></textarea>
+
+                    <div>
+                        <h5 class="sol-det" style="cursor: pointer;" onclick="toggleSolution('show-decrypted')">Show Solution &#9660;</h5>
+                        <div id="show-decrypted" style="display: none">
+                            <h3>Solution on Decryption</h3>
+                            <textarea style="
+                            width: 250px;
+                            height: 200px;"  id="solutiondecrypt" readonly></textarea>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div style="
+            color: white;">
+                <hr>    
+            </div>
+
+            <div style="
+            color: white;
+            padding: 10px;">
+
+                <!-- Decrypted Message -->
+                <h5>Decrypted Message</h5>
+                <textarea style="
+                text-align: center; 
+                height: 87px;
+                width: 300px; 
+                padding-top: 15px;  
+                border: 1px solid #27979d;
+                border-radius: 5px;
+                outline: none;"  id="decryptedMatrix" rows="10" cols="10" readonly></textarea>
+
+            </div>
+                
+        </div>
+
+
+<script>
+    function toggleSolution(id) {
+        var element = document.getElementById(id);
+        if (element.style.display === "none") {
+            element.style.display = "block";
+        } else {
+            element.style.display = "none";
+        }
+    }
+</script>
+
+  <script>
+    const toastTrigger = document.getElementById('liveToastBtn')
+    const toastLiveExample = document.getElementById('liveToast')
+
+    if (toastTrigger) {
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+    toastTrigger.addEventListener('click', () => {
+    toastBootstrap.show()
+  })
+}
+  </script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+
+<script>
+    const substitutionMatrix = {
+      A: "1",
+      B: "2",
+      C: "3",
+      D: "4",
+      E: "5",
+      F: "6",
+      G: "7",
+      H: "8",
+      I: "9",
+      J: "10",
+      K: "11",
+      L: "12",
+      M: "13",
+      N: "14",
+      O: "15",
+      P: "16",
+      Q: "17",
+      R: "18",
+      S: "19",
+      T: "20",
+      U: "21",
+      V: "22",
+      W: "23",
+      X: "24",
+      Y: "25",
+      Z: "26",
+      " ": "27",
+    };
+
+    function calculate() {
+      let input = document.getElementById("matrixInput").value;
+      let values = input.split(",").map((value) => parseFloat(value));
+      let resultTextarea = document.getElementById("solution");
+      let resultTextarea1 = document.getElementById("decrypt");
+      let solutiondecryption = document.getElementById("solutiondecrypt");
+
+      // Check if the input contains exactly 9 values
+      if (values.length !== 9 || values.includes(NaN)) {
+        document.getElementById("result").textContent =
+          "Invalid input. Please enter 9 valid numbers separated by commas.";
+        return;
+      }
+
+      //SUBSTITUTION CIPHER
+      let matrixB = document.getElementById("matrixB").value.toUpperCase();
+      let encryptedMessage = "";
+
+      if (matrixB.length < 18) {
+        const numWhiteSpace = 18 - matrixB.length;
+        matrixB += " ".repeat(numWhiteSpace); // Fill with whitespace
+      }
+
+      for (let i = 0; i < matrixB.length; i++) {
+        const char = matrixB[i];
+        if (substitutionMatrix[char] !== undefined) {
+          if (encryptedMessage !== "") {
+            encryptedMessage += ",";
+          }
+          encryptedMessage += substitutionMatrix[char].toString();
+        } else {
+          //encryptedMessage += char; // Keep characters that are not in the matrix as they are
+          encryptedMessage += substitutionMatrix[" "].toString();
+        }
+      }
+
+      //printing cipher Message
+      let ciphertextArray = encryptedMessage.split(",");
+      console.log(ciphertextArray); //example print of array
+
+      // Extract matrixA and MatrixB values
+      let [a11, a12, a13, a21, a22, a23, a31, a32, a33] = values;
+
+      //Column1 Matrix A = a11, a21, ,31
+      let b1 = parseInt(ciphertextArray[0], 10),
+        b2 = parseInt(ciphertextArray[1], 10),
+        b3 = parseInt(ciphertextArray[2], 10),
+        //Column2
+        b4 = parseInt(ciphertextArray[3], 10),
+        b5 = parseInt(ciphertextArray[4], 10),
+        b6 = parseInt(ciphertextArray[5], 10),
+        //Column3
+        b7 = parseInt(ciphertextArray[6], 10),
+        b8 = parseInt(ciphertextArray[7], 10),
+        b9 = parseInt(ciphertextArray[8], 10),
+        //Column4
+        b10 = parseInt(ciphertextArray[9], 10),
+        b11 = parseInt(ciphertextArray[10], 10),
+        b12 = parseInt(ciphertextArray[11], 10),
+        //Column5
+        b13 = parseInt(ciphertextArray[12], 10),
+        b14 = parseInt(ciphertextArray[13], 10),
+        b15 = parseInt(ciphertextArray[14], 10),
+        //Column6
+        b16 = parseInt(ciphertextArray[15], 10),
+        b17 = parseInt(ciphertextArray[16], 10),
+        b18 = parseInt(ciphertextArray[17], 10);
+
+      let matA = [
+        [a11, a21, a31],
+        [a12, a22, a32],
+        [a13, a23, a33],
+      ];
+
+      let matB = [
+        [b1, b4, b7, b10, b13, b16],
+        [b2, b5, b8, b11, b14, b17],
+        [b3, b6, b9, b12, b15, b18],
+      ];
+
+      let matAinverse = [
+        [a11, a12, a13],
+        [a21, a22, a23],
+        [a31, a32, a33],
+      ];
+
+      //process of multiplying matrices
+      function multiplyMatrices(matA, matB) {
+        let result = [];
+        for (let i = 0; i < matA.length; i++) {
+          result[i] = [];
+          for (let j = 0; j < matB[0].length; j++) {
+            result[i][j] = 0;
+            for (let k = 0; k < matA[0].length; k++) {
+              const product = matA[i][k] * matB[k][j];
+              result[i][j] += product;
+              resultTextarea.value += `Step ${i * matB[0].length + j + 1}: ${
+                matA[i][k]
+              } * ${matB[k][j]} = ${product}\n`;
+            }
+          }
+        }
+        return result;
+      }
+
+      //multiply the matrices
+      let resultMatrix = multiplyMatrices(matA, matB);
+
+      // extract the value of encrypted message
+      //row1
+      let bb1 = resultMatrix[0][0],
+        bb2 = resultMatrix[0][1],
+        bb3 = resultMatrix[0][2],
+        //row2
+        bb4 = resultMatrix[0][3],
+        bb5 = resultMatrix[0][4],
+        bb6 = resultMatrix[0][5],
+        //row3
+        bb7 = resultMatrix[1][0],
+        bb8 = resultMatrix[1][1],
+        bb9 = resultMatrix[1][2],
+        //row4
+        bb10 = resultMatrix[1][3],
+        bb11 = resultMatrix[1][4],
+        bb12 = resultMatrix[1][5],
+        //row5
+        bb13 = resultMatrix[2][0],
+        bb14 = resultMatrix[2][1],
+        bb15 = resultMatrix[2][2],
+        //row6
+        bb16 = resultMatrix[2][3],
+        bb17 = resultMatrix[2][4],
+        bb18 = resultMatrix[2][5];
+
+      let encryption = [
+        [bb1, bb2, bb3, bb4, bb5, bb6],
+        [bb7, bb8, bb9, bb10, bb11, bb12],
+        [bb13, bb14, bb15, bb16, bb17, bb18],
+      ];
+
+      // Function to calculate the cofactor of a 3x3 matrix
+      function cofactor(matAinverse, row, col) {
+        let minorMatrix = matAinverse
+          .filter((r, i) => i !== row)
+          .map((row) => row.filter((el, j) => j !== col));
+        let determinant =
+          minorMatrix[0][0] * minorMatrix[1][1] -
+          minorMatrix[0][1] * minorMatrix[1][0];
+        return (row + col) % 2 === 0 ? determinant : -determinant;
+      }
+
+      // Calculate the cofactor matrix
+      let stepsTextArea = document.getElementById("solutioncofactorMatrix");
+      stepsTextArea.value = ""; // Clear the text area
+      let cofactorMatrix = [];
+      let num = 0;
+      for (let i = 0; i < matAinverse.length; i++) {
+        cofactorMatrix[i] = [];
+        for (let j = 0; j < matAinverse[i].length; j++) {
+          const minorMatrix = matAinverse
+            .filter((r, k) => k !== i)
+            .map((row) => row.filter((el, l) => l !== j));
+          const determinant =
+            minorMatrix[0][0] * minorMatrix[1][1] -
+            minorMatrix[0][1] * minorMatrix[1][0];
+          const cofactorValue =
+            (i + j) % 2 === 0 ? determinant : -determinant;
+          stepsTextArea.value += `Steps ${num++}: row ${i}, column ${j}\n`;
+          stepsTextArea.value += `Minor Matrix:\n${JSON.stringify(
+            minorMatrix
+          )}\n`;
+          stepsTextArea.value += `Determinant of the Minor Matrix: ${determinant}\n`;
+          stepsTextArea.value += `Cofactor Value: ${cofactorValue}\n\n`;
+          cofactorMatrix[i][j] = cofactorValue;
+        }
+
+        stepsTextArea.value += "Cofactor Matrix:\n";
+        stepsTextArea.value += JSON.stringify(cofactorMatrix);
+      }
+
+      // Print the cofactor matrix
+
+      console.log("Original Matrix:");
+      for (let i = 0; i < 3; i++) {
+        console.log(matAinverse[i].join(" "));
+      }
+
+      // Print the cofactor matrix
+      console.log("\nCofactor Matrix:");
+      for (let i = 0; i < 3; i++) {
+        console.log(cofactorMatrix[i].join(" "));
+      }
+
+      //  const solutionadjoint = ;
+
+      //adjoint with
+      //row1
+      let ad1 = cofactorMatrix[0][0],
+        ad2 = cofactorMatrix[0][1],
+        ad3 = cofactorMatrix[0][2],
+        //row2
+        ad4 = cofactorMatrix[1][0],
+        ad5 = cofactorMatrix[1][1],
+        ad6 = cofactorMatrix[1][2],
+        //row3
+        ad7 = cofactorMatrix[2][0],
+        ad8 = cofactorMatrix[2][1],
+        ad9 = cofactorMatrix[2][2];
+
+      //matrix for adjoint A
+      let adjoint = [
+        [ad1, ad2, ad3],
+        [ad4, ad5, ad6],
+        [ad7, ad8, ad9],
+      ];
+
+      //decryption process
+      function Decryption(adjoint, encryption) {
+        let result1 = [];
+        for (let i = 0; i < adjoint.length; i++) {
+          result1[i] = [];
+          for (let j = 0; j < encryption[0].length; j++) {
+            result1[i][j] = 0;
+            for (let k = 0; k < adjoint[0].length; k++) {
+              const product1 = adjoint[i][k] * encryption[k][j];
+              result1[i][j] += product1;
+              solutiondecryption.value += `Step ${
+                i * encryption[0].length + j + 1
+              }: ${adjoint[i][k]} * ${encryption[k][j]} = ${product1}\n`;
+            }
+          }
+        }
+        return result1;
+      }
+
+      //process of decryption of adjoin and encrypted
+      let resultMatrix1 = Decryption(adjoint, encryption);
+      //row1
+      let bbb1 = resultMatrix1[0][0],
+        bbb2 = resultMatrix1[0][1],
+        bbb3 = resultMatrix1[0][2],
+        bbb4 = resultMatrix1[0][3],
+        bbb5 = resultMatrix1[0][4],
+        bbb6 = resultMatrix1[0][5],
+        //row2
+        bbb7 = resultMatrix1[1][0],
+        bbb8 = resultMatrix1[1][1],
+        bbb9 = resultMatrix1[1][2],
+        bbb10 = resultMatrix1[1][3],
+        bbb11 = resultMatrix1[1][4],
+        bbb12 = resultMatrix1[1][5],
+        //row3
+        bbb13 = resultMatrix1[2][0],
+        bbb14 = resultMatrix1[2][1],
+        bbb15 = resultMatrix1[2][2],
+        bbb16 = resultMatrix1[2][3],
+        bbb17 = resultMatrix1[2][4],
+        bbb18 = resultMatrix1[2][5];
+
+      let decryptmatrix = `${bbb1},${bbb7},${bbb13},${bbb2},${bbb8},${bbb14},${bbb3},${bbb9},${bbb15},${bbb4},${bbb10},${bbb16},${bbb5},${bbb11},${bbb17},${bbb6},${bbb12},${bbb18}`;
+      // let decryptedMatrix = document.getElementById("decrypt").value;
+      let decryptedMessage = "";
+
+      // Define a reverseSubstitutionMatrix to map numbers to characters
+      const reverseSubstitutionMatrix = {
+        1: "A",
+        2: "B",
+        3: "C",
+        4: "D",
+        5: "E",
+        6: "F",
+        7: "G",
+        8: "H",
+        9: "I",
+        10: "J",
+        11: "K",
+        12: "L",
+        13: "M",
+        14: "N",
+        15: "O",
+        16: "P",
+        17: "Q",
+        18: "R",
+        19: "S",
+        20: "T",
+        21: "U",
+        22: "V",
+        23: "W",
+        24: "X",
+        25: "Y",
+        26: "Z",
+        27: " ",
+        // Add more mappings as needed for your specific use case
+      };
+
+      const ciphertextArray1 = decryptmatrix.split(",");
+
+      // Iterate through the array and decrypt each number
+      for (let i = 0; i < ciphertextArray1.length; i++) {
+        const characterCode = parseInt(ciphertextArray1[i]); // Convert the string to a number
+        if (reverseSubstitutionMatrix[characterCode] !== undefined) {
+          decryptedMessage += reverseSubstitutionMatrix[characterCode];
+        } else {
+          // Handle any other characters as needed (e.g., spaces, special characters)
+          decryptedMessage += characterCode; // Append the number as is
+        }
+      }
+
+      const rows = 3;
+      const columns = 6;
+      let dmatrix = [];
+
+      for (let i = 0; i < rows; i++) {
+        dmatrix.push([]);
+        for (let j = 0; j < columns; j++) {
+          const char = decryptedMessage[j * rows + i];
+          dmatrix[i].push(char);
+        }
+      }
+
+      // Convert the matrix to a string with line
+      const matrixString = dmatrix.map((row) => row.join(" ")).join("\n");
+
+      // Set the matrix string in the textarea
+      const textarea = document.getElementById("decryptedMatrix");
+
+      // Calculate determinant
+      const determinant =
+        a11 * (a22 * a33 - a23 * a32) -
+        a12 * (a21 * a33 - a23 * a31) +
+        a13 * (a21 * a32 - a22 * a31);
+
+      if (determinant == 1) {
+        document.getElementById("encryptedMessage").value += encryptedMessage;
+        // Display the determinant
+        document.getElementById(
+          "result"
+        ).textContent = `Determinant: ${determinant}`;
+
+        // Display solution steps
+        document.getElementById(
+          "solutiondeterminant"
+        ).textContent = `Solution Steps:\n`;
+        document.getElementById(
+          "solutiondeterminant"
+        ).textContent += `1. a11 * (a22 * a33 - a23 * a32) = ${a11} * (${a22} * ${a33} - ${a23} * ${a32}) = ${
+          a11 * (a22 * a33 - a23 * a32)
+        }\n`;
+        document.getElementById(
+          "solutiondeterminant"
+        ).textContent += `2. a12 * (a21 * a33 - a23 * a31) = ${a12} * (${a21} * ${a33} - ${a23} * ${a31}) = ${
+          a12 * (a21 * a33 - a23 * a31)
+        }\n`;
+        document.getElementById(
+          "solutiondeterminant"
+        ).textContent += `3. a13 * (a21 * a32 - a22 * a31) = ${a13} * (${a21} * ${a32} - ${a22} * ${a31}) = ${
+          a13 * (a21 * a32 - a22 * a31)
+        }\n`;
+        document.getElementById(
+          "solutiondeterminant"
+        ).textContent += `4. Determinant = 1 - 2 + 3 = ${
+          a11 * (a22 * a33 - a23 * a32) -
+          a12 * (a21 * a33 - a23 * a31) +
+          a13 * (a21 * a32 - a22 * a31)
+        }`;
+        //Display MatrixA
+        document.getElementById(
+          "MatrixA"
+        ).textContent += `[ ${a11}, ${a21}, ${a31}]\n`;
+        document.getElementById(
+          "MatrixA"
+        ).textContent += `[ ${a12}, ${a22}, ${a32}]\n`;
+        document.getElementById(
+          "MatrixA"
+        ).textContent += `[ ${a13}, ${a23}, ${a33}]\n`;
+        //display MatrixB
+        document.getElementById(
+          "Matrixtext"
+        ).textContent += `[ ${b1}, ${b4}, ${b7}, ${b10}, ${b13}, ${b16}]\n`;
+        document.getElementById(
+          "Matrixtext"
+        ).textContent += `[ ${b2}, ${b5}, ${b8}, ${b11}, ${b14}, ${b17}]\n`;
+        document.getElementById(
+          "Matrixtext"
+        ).textContent += `[ ${b3}, ${b6}, ${b9}, ${b12}, ${b15}, ${b18}]\n`;
+        const resultTextarea = document.getElementById("resultMatrix");
+        //displaying the result
+        resultTextarea.value += "Encrypted Matrix:\n";
+        for (let i = 0; i < resultMatrix.length; i++) {
+          for (let j = 0; j < resultMatrix[i].length; j++) {
+            resultTextarea.value += `${resultMatrix[i][j]}\t`;
+          }
+          resultTextarea.value += "\n";
+        }
+        //displaying the solution of multiplying matrices
+
+        // Create a string to hold the content of the resultMatrix
+        let resultText = "";
+
+        for (let i = 0; i < resultMatrix.length; i++) {
+          for (let j = 0; j < resultMatrix[i].length; j++) {
+            resultText += resultMatrix[i][j] + "\t"; // Use '\t' to separate values with tabs
+          }
+          resultText += "\n"; // Add a new line after each row
+        }
+
+        //Display transpose
+        document.getElementById(
+          "transpose"
+        ).textContent += `[ ${a11}, ${a12}, ${a33}]\n`;
+        document.getElementById(
+          "transpose"
+        ).textContent += `[ ${a21}, ${a22}, ${a23}]\n`;
+        document.getElementById(
+          "transpose"
+        ).textContent += `[ ${a31}, ${a32}, ${a33}]\n`;
+
+        // Set the text content of the textarea
+        resultTextarea.value = resultText;
+
+        //printing cofactors (cross multiply)
+        let cofactorMatrixTextarea =
+          document.getElementById("cofactorMatrix");
+        for (let i = 0; i < 3; i++) {
+          cofactorMatrixTextarea.value += cofactorMatrix[i].join(" ") + "\n";
+        }
+        textarea.value = matrixString;
+      } else if (determinant != 1) {
+        document.getElementById("result").textContent =
+          "The Determinant is not equal to 1";
+        document.getElementById("solution").textContent = "";
+        document.getElementById("encryptedMessage").value = "";
+        document.getElementById("matrixB").textContent = "";
+        document.getElementById("solution").textContent = "";
+        document.getElementById("solutiondeterminant").textContent = "";
+        document.getElementById("matrixtext").textContent = "";
+        document.getElementById("resultMatrix").textContent = "";
+        document.getElementById("transpose").textContent = "";
+        document.getElementById("solutiondecrypt").textContent = "";
+        document.getElementById("solutioncofactorMatrix").textContent = "";
+        return;
+      }
+
+      //displaying the result of multiplying decryption
+      if (resultTextarea1) {
+        resultTextarea1.value = ""; // Clear the textarea
+
+        for (let i = 0; i < resultMatrix1.length; i++) {
+          for (let j = 0; j < resultMatrix1[i].length; j++) {
+            resultTextarea1.value += resultMatrix1[i][j] + " ";
+          }
+          resultTextarea1.value += "\n"; // Move to the next row
+        }
+      }
+
+      function adjustInputLength() {
+        const inputElement = document.getElementById("matrixB");
+        if (inputElement.value.length > 18) {
+          inputElement.value = inputElement.value.substring(0, 18);
+        }
+      }
+      function clear() {
+        document.getElementById("matrixB").textContent = "";
+        document.getElementById("solution").textContent = "";
+        document.getElementById("solutiondeterminant").textContent = "";
+        document.getElementById("matrixA").textContent = "";
+        document.getElementById("matrixtext").textContent = "";
+        document.getElementById("resultMatrix").textContent = "";
+      }
+    }
+  </script>
+</body>
+</html>
